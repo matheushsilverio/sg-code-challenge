@@ -1,0 +1,45 @@
+service: sg-code-challenge
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: 'nodejs18.x'
+  stage: ${opt:stage, 'dev'}
+  profile: default
+  region: us-east-1
+
+  stackTags:
+    SERVICE_NAME: 'sg-code-challenge'
+
+  environment:
+    STAGE: ${self:provider.stage}
+
+functions:
+  createOrder:
+    handler: src/use-cases/create-order/controller.handler
+    events:
+      - http:
+          path: /orders
+          method: post
+          cors: true
+
+package:
+  individually: true
+  exclude:
+    - node_modules/**
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    exclude:
+      - aws-sdk
+    target: 'node18'
+    platform: 'node'
+    concurrency: 10
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-plugin-resource-tagging
