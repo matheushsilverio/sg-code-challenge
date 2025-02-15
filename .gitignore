@@ -1,5 +1,7 @@
 .serverless
-node_modules/*
-.esbuild/*
-.build/*
+node_modules
+.esbuild
+.build
 *-lock.yaml
+dynamodb_data
+.dynamodb

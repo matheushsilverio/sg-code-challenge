@@ -4,15 +4,16 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: 'nodejs18.x'
-  stage: ${opt:stage, 'dev'}
+  stage: ${opt:stage, 'local'}
   profile: default
-  region: us-east-1
+  region: ${opt:region, 'us-east-1'}
 
   stackTags:
     SERVICE_NAME: 'sg-code-challenge'
 
   environment:
     STAGE: ${self:provider.stage}
+    AWS_REGION: ${self:provider.region}
 
 functions:
   createOrder:
@@ -38,8 +39,41 @@ custom:
     target: 'node18'
     platform: 'node'
     concurrency: 10
+  dynamodb:
+    stages:
+      - local
+    start:
+      port: 8000
+      inMemory: false
+      migrate: true
+      noStart: true
+      external: true
+
+resources:
+  Resources:
+    OrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.stage}-orders
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: orderId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: orderId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: userIdIndex
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
 plugins:
   - serverless-esbuild
   - serverless-offline
   - serverless-plugin-resource-tagging
+  - serverless-dynamodb-local
