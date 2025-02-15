@@ -1,6 +1,6 @@
 import { Handler } from 'aws-lambda';
 import { BaseController } from '../../shared/base.controller';
-import CreateOrderUseCase from './create-order.usecase';
+import CreateOrderUseCase from './usecase';
 
 class CreateOrderController extends BaseController {
   constructor() {

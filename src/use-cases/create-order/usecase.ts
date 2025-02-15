@@ -11,8 +11,8 @@ export default class CreateOrderUseCase implements UseCase {
   async execute(
     params: executeParamsType,
   ): Promise<APIGatewayProxyStructuredResultV2> {
-    const { body, pathParameters, queryStringParameters } = params;
+    const { body } = params;
 
-    return successResponse({ body, pathParameters, queryStringParameters });
+    return successResponse({ body });
   }
 }
