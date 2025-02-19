@@ -13,24 +13,22 @@ provider:
 
   environment:
     STAGE: ${self:provider.stage}
-    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
 
-iam:
-  role:
-    statements:
-      - Effect: Allow
-        Action:
-          - dynamodb:PutItem
-          - dynamodb:GetItem
-          - dynamodb:Scan
-          - dynamodb:Query
-          - dynamodb:UpdateItem
-          - dynamodb:DeleteItem
-          - dynamodb:DescribeTable
-        Resource:
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders
-          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders/index/userIdIndex
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:DescribeTable
+          Resource:
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders
+            - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders/index/userIdIndex
 
 functions:
   createOrder:
@@ -84,6 +82,8 @@ custom:
     target: 'node18'
     platform: 'node'
     concurrency: 10
+  dotenv:
+    basePath: .env
 
 resources:
   Resources:
