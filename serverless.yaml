@@ -54,6 +54,13 @@ functions:
           path: /orders/{orderId}
           method: get
           cors: true
+  getUserOrders:
+    handler: src/use-cases/get-user-orders/controller.handler
+    events:
+      - http:
+          path: /users/{userId}/orders
+          method: get
+          cors: true
 
 package:
   individually: true
