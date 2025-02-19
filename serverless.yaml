@@ -5,7 +5,7 @@ provider:
   name: aws
   runtime: 'nodejs18.x'
   stage: ${opt:stage, 'dev'}
-  profile: serverless
+  # profile: serverless
   region: ${opt:region, 'us-east-1'}
 
   stackTags:
