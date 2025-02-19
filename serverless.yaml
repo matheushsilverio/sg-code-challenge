@@ -61,6 +61,13 @@ functions:
           path: /users/{userId}/orders
           method: get
           cors: true
+  deleteOrder:
+    handler: src/use-cases/delete-order/controller.handler
+    events:
+      - http:
+          path: /orders/{orderId}
+          method: delete
+          cors: true
 
 package:
   individually: true
