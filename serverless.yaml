@@ -4,8 +4,8 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: 'nodejs18.x'
-  stage: ${opt:stage, 'local'}
-  profile: default
+  stage: ${opt:stage, 'dev'}
+  profile: serverless
   region: ${opt:region, 'us-east-1'}
 
   stackTags:
@@ -13,7 +13,24 @@ provider:
 
   environment:
     STAGE: ${self:provider.stage}
-    AWS_REGION: ${self:provider.region}
+    AWS_ACCESS_KEY_ID: ${env:AWS_ACCESS_KEY_ID}
+    AWS_SECRET_ACCESS_KEY: ${env:AWS_SECRET_ACCESS_KEY}
+
+iam:
+  role:
+    statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:GetItem
+          - dynamodb:Scan
+          - dynamodb:Query
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+          - dynamodb:DescribeTable
+        Resource:
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders
+          - arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.stage}-orders/index/userIdIndex
 
 functions:
   createOrder:
@@ -22,6 +39,20 @@ functions:
       - http:
           path: /orders
           method: post
+          cors: true
+  updateOrderStatus:
+    handler: src/use-cases/update-order-status/controller.handler
+    events:
+      - http:
+          path: /orders/{orderId}
+          method: put
+          cors: true
+  getOrder:
+    handler: src/use-cases/get-order/controller.handler
+    events:
+      - http:
+          path: /orders/{orderId}
+          method: get
           cors: true
 
 package:
@@ -39,15 +70,6 @@ custom:
     target: 'node18'
     platform: 'node'
     concurrency: 10
-  dynamodb:
-    stages:
-      - local
-    start:
-      port: 8000
-      inMemory: false
-      migrate: true
-      noStart: true
-      external: true
 
 resources:
   Resources:

@@ -37,12 +37,24 @@ export function createdResponse<T>(data: T): APIGatewayProxyStructuredResultV2 {
 
 export function errorResponse(
   err: Error | string,
-  statusCode = 400,
+  statusCode = 500,
 ): APIGatewayProxyStructuredResultV2 {
   const message = typeof err === 'string' ? err : err.message;
 
   return {
     statusCode,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ error: message }),
+  };
+}
+
+export function badRequest(
+  message: any = 'Bad Request',
+): APIGatewayProxyStructuredResultV2 {
+  return {
+    statusCode: 400,
     headers: {
       'Content-Type': 'application/json',
     },
