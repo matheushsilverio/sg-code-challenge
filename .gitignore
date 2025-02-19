@@ -2,7 +2,6 @@
 node_modules
 .esbuild
 .build
-*-lock.yaml
 dynamodb_data
 .dynamodb
 .env
