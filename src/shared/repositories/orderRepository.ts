@@ -20,10 +20,7 @@ export default class OrderRepository {
   }
 
   async updateStatus(orderId: string, status: string): Promise<Order | null> {
-    return await this.model.update(
-      { orderId },
-      { status, updatedAt: new Date().toISOString() },
-    );
+    return await this.model.update({ orderId }, { status });
   }
 
   async delete(orderId: string): Promise<void> {
