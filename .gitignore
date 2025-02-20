@@ -5,3 +5,5 @@ node_modules
 dynamodb_data
 .dynamodb
 .env
+coverage
+.DS_Store

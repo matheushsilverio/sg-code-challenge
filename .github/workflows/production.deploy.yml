@@ -8,8 +8,30 @@ on:
 env:
   STAGE: main
 jobs:
+  test:
+    name: units tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
   deploy:
     name: deploy
+    needs: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
