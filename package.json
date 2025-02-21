@@ -1,10 +1,11 @@
 {
   "name": "sg-code-challenge",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a fictional project designed as a base template for building a TypeScript REST API using Serverless Framework and DynamoDB.",
   "scripts": {
     "start": "sls offline",
     "dev": "nodemon -e js,ts,jsx,tsx -x npx sls offline --stage dev",
+    "local": "nodemon -e js,ts,jsx,tsx -x npx sls offline --stage local",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
