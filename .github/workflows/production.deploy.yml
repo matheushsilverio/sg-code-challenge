@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  STAGE: main
+  STAGE: prod
 jobs:
   test:
     name: units tests
